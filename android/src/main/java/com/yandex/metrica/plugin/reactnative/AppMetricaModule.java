@@ -18,6 +18,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.yandex.metrica.YandexMetrica;
+import com.yandex.metrica.ecommerce.ECommerceEvent;
 
 public class AppMetricaModule extends ReactContextBaseJavaModule {
 
@@ -86,6 +87,11 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
         } else {
             YandexMetrica.reportEvent(eventName, attributes.toHashMap());
         }
+    }
+
+    @ReactMethod
+    public void reportECommerce(ECommerceEvent ecommerceEvent) {
+        YandexMetrica.reportECommerce(ecommerceEvent);
     }
 
     @ReactMethod

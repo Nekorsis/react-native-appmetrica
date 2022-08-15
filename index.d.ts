@@ -15,7 +15,7 @@ type AppMetricaConfig = {
   appVersion?: string,
   crashReporting?: boolean,
   firstActivationAsUpdate?: boolean,
-  location: Location,
+  location?: Location,
   locationTracking?: boolean,
   logs?: boolean,
   sessionTimeout?: number,
@@ -28,6 +28,20 @@ type AppMetricaConfig = {
   // Only iOS
   activationAsSessionStart?: boolean,
   sessionsAutoTracking?: boolean,
+}
+
+type ECommercePrice = {
+  value: number,
+  currency: string, // RUB || USD
+}
+
+type ECommerceProduct = {
+  id: string,
+  actualPrice?: ECommercePrice,
+  promocodes?: string[],
+  originalPrice?: ECommercePrice,
+  name?: string,
+  categories?: string[],
 }
 
 type PreloadInfo = {
@@ -48,41 +62,40 @@ type Location = {
 type AppMetricaDeviceIdReason = 'UNKNOWN' | 'NETWORK' | 'INVALID_RESPONSE';
 
 export default {
-
-  activate(config: AppMetricaConfig) {
+  activate: (config: AppMetricaConfig) => {
     AppMetrica.activate(config);
   },
 
   // Android
-  async getLibraryApiLevel(): number {
+  getLibraryApiLevel: async () => {
     return AppMetrica.getLibraryApiLevel();
   },
 
-  async getLibraryVersion(): string {
+  getLibraryVersion: async (): string => {
     return AppMetrica.getLibraryVersion();
   },
 
-  pauseSession() {
+  pauseSession: () => {
     AppMetrica.pauseSession();
   },
 
-  reportAppOpen(deeplink: ?string = null) {
+  reportAppOpen: (deeplink: ?string = null) => {
     AppMetrica.reportAppOpen(deeplink);
   },
 
-  reportError(error: string, reason: Object) {
+  reportError: (error: string, reason: Object) => {
     AppMetrica.reportError(error);
   },
 
-  reportEvent(eventName: string, attributes: ?Object = null) {
+  reportEvent: (eventName: string, attributes: ?Object = null) => {
     AppMetrica.reportEvent(eventName, attributes);
   },
 
-  reportECommerce(ecommerceEvent: Object) {
+  reportECommerce: (ecommerceEvent: ECommerceProduct) => {
     AppMetrica.reportECommerce(ecommerceEvent)
   },
 
-  reportReferralUrl(referralUrl: string) {
+  reportReferralUrl: (referralUrl: string) => {
     AppMetrica.reportReferralUrl(referralUrl);
   },
 
@@ -90,27 +103,27 @@ export default {
     AppMetrica.requestAppMetricaDeviceID(listener);
   },
 
-  resumeSession() {
+  resumeSession: () => {
     AppMetrica.resumeSession();
   },
 
-  sendEventsBuffer() {
+  sendEventsBuffer: () => {
     AppMetrica.sendEventsBuffer();
   },
 
-  setLocation(location: ?Location) {
+  setLocation: (location: ?Location) => {
     AppMetrica.setLocation(location);
   },
 
-  setLocationTracking(enabled: boolean) {
+  setLocationTracking: (enabled: boolean) => {
     AppMetrica.setLocationTracking(enabled);
   },
 
-  setStatisticsSending(enabled: boolean) {
+  setStatisticsSending: (enabled: boolean) => {
     AppMetrica.setStatisticsSending(enabled);
   },
 
-  setUserProfileID(userProfileID?: string) {
+  setUserProfileID: (userProfileID?: string) => {
     AppMetrica.setUserProfileID(userProfileID);
   },
 };
