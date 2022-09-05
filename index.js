@@ -113,4 +113,20 @@ export default {
   setUserProfileID(userProfileID?: string) {
     AppMetrica.setUserProfileID(userProfileID);
   },
+
+  // ECommerce methods
+  addCartItemEvent: (data: ECommerceCartItem) => {
+    AppMetrica.addCartItemEvent(data);
+  },
+
+  removeCartItemEvent: (data: ECommerceCartItem) => {
+    AppMetrica.removeCartItemEvent(data);
+  },
+
+  beginCheckoutEvent: (data: ECommerceOrder) => {
+    AppMetrica.beginCheckoutEvent(data)
+  },
+  purchaseEvent: (data: ECommerceOrder) => {
+    AppMetrica.purchaseEvent(data)
+  },
 };
