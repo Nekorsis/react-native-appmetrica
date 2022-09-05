@@ -7,7 +7,7 @@
  */
 
 import React, {Component, useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
+import {Button, StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity} from 'react-native';
 
 import AppMetrica from 'react-native-appmetrica';
 
@@ -51,6 +51,29 @@ export default class App extends Component {
     }
   }
 
+  hndlePress = () => {
+    AppMetrica.purchaseEvent({
+      id: "123",
+      cartItems: [
+        {
+          "product": {
+            "id": "111",
+            "name": "Test product 1",
+            "actualPrice": {
+              value: 50,
+              currency: 'RUB'
+            }
+          },
+          quantity: 1,
+          revenue: {
+            value: 50,
+            currency: 'RUB'
+          }
+        }
+      ],
+    })
+  }
+
   render() {
     return (
       <SafeAreaView>
@@ -77,6 +100,11 @@ export default class App extends Component {
                   ? this.appMetricaDeviceId
                   : this.state['appMetricaDeviceId']}
               </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>ECommerce events</Text>
+                <Button onPress={this.hndlePress} title="Send: purchaseEvent">
+                </Button>
             </View>
           </View>
         </ScrollView>
