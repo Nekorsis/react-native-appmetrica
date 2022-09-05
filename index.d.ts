@@ -35,6 +35,17 @@ type ECommercePrice = {
   currency: string, // RUB || USD
 }
 
+enum ECommerceEventName {
+  addCartItemEvent,
+  beginCheckoutEvent,
+  purchaseEvent,
+  showProductCardEvent,
+  showProductDetailsEvent,
+  showScreenEvent,
+}
+
+
+
 type ECommerceProduct = {
   id: string,
   actualPrice?: ECommercePrice,
@@ -42,6 +53,17 @@ type ECommerceProduct = {
   originalPrice?: ECommercePrice,
   name?: string,
   categories?: string[],
+}
+
+type ECommerceCartItem = {
+  product: ECommerceProduct,
+  revenue: ECommercePrice,
+  quantity?: number,
+}
+
+type ECommerceOrder = {
+  id: string;
+  cartItems: ECommerceCartItem[];
 }
 
 type PreloadInfo = {
@@ -83,16 +105,24 @@ export default {
     AppMetrica.reportAppOpen(deeplink);
   },
 
+  addCartItemEvent: (data: ECommerceCartItem) => {
+    AppMetrica.addCartItemEvent(data);
+  },
+
+  removeCartItemEvent: (data: ECommerceCartItem) => {
+    AppMetrica.removeCartItemEvent(data);
+  },
+
+  purchaseEvent: (data: ECommerceOrder) => {
+    AppMetrica.purchaseEvent(data)
+  },
+
   reportError: (error: string, reason: Object) => {
     AppMetrica.reportError(error);
   },
 
   reportEvent: (eventName: string, attributes: ?Object = null) => {
     AppMetrica.reportEvent(eventName, attributes);
-  },
-
-  reportECommerce: (ecommerceEvent: ECommerceProduct) => {
-    AppMetrica.reportECommerce(ecommerceEvent)
   },
 
   reportReferralUrl: (referralUrl: string) => {

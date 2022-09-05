@@ -26,9 +26,12 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
 
+    private AppMetricaECommerce appMetricaECommerce = new AppMetricaECommerce();
+
     public AppMetricaModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+
     }
 
     @Override
@@ -40,6 +43,7 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
     public void activate(ReadableMap configMap) {
         YandexMetrica.activate(reactContext, Utils.toYandexMetricaConfig(configMap));
         enableActivityAutoTracking();
+        Log.d("API KEY", (String)configMap.toHashMap().get("apiKey"));
     }
 
     private void enableActivityAutoTracking() {
@@ -90,8 +94,30 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void reportECommerce(ECommerceEvent ecommerceEvent) {
-        YandexMetrica.reportECommerce(ecommerceEvent);
+    public void addCartItemEvent(ReadableMap event) {
+        if (event == null) {
+            Log.d("addCartItemEvent", "Missing param event for addCartItemEvent");
+            return;
+        }
+        this.appMetricaECommerce.addCartItemEvent(event);
+    }
+
+    @ReactMethod
+    public void removeCartItemEvent(ReadableMap event) {
+        if (event == null) {
+            Log.d("removeCartItemEvent", "Missing param event for removeCartItemEvent");
+            return;
+        }
+        this.appMetricaECommerce.removeCartItemEvent(event);
+    }
+
+    @ReactMethod
+    public void purchaseEvent(ReadableMap event) {
+        if (event == null) {
+            Log.d("purchaseEvent", "Missing param event for purchaseEvent");
+            return;
+        }
+        this.appMetricaECommerce.purchaseEvent(event);
     }
 
     @ReactMethod
