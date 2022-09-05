@@ -11,8 +11,10 @@ import App from './App';
 import {name as appName} from './app.json';
 import AppMetrica from 'react-native-appmetrica';
 
+import { apiKey } from './config.local'
+
 AppMetrica.activate({
-  apiKey: ...Your_APIKey...,
+  apiKey,
 });
 try {
   callingNonExistentVariable;
