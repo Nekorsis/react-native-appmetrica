@@ -18,7 +18,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.yandex.metrica.YandexMetrica;
-import com.yandex.metrica.ecommerce.ECommerceEvent;
 
 public class AppMetricaModule extends ReactContextBaseJavaModule {
 
@@ -43,7 +42,6 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
     public void activate(ReadableMap configMap) {
         YandexMetrica.activate(reactContext, Utils.toYandexMetricaConfig(configMap));
         enableActivityAutoTracking();
-        Log.d("API KEY", (String)configMap.toHashMap().get("apiKey"));
     }
 
     private void enableActivityAutoTracking() {
@@ -94,9 +92,14 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public AppMetricaECommerce reportECommerce() {
+        return this.appMetricaECommerce;
+    }
+
+    @ReactMethod
     public void addCartItemEvent(ReadableMap event) {
         if (event == null) {
-            Log.d("addCartItemEvent", "Missing param event for addCartItemEvent");
+            Log.d(TAG, "addCartItemEvent: Missing param event");
             return;
         }
         this.appMetricaECommerce.addCartItemEvent(event);
@@ -105,7 +108,7 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeCartItemEvent(ReadableMap event) {
         if (event == null) {
-            Log.d("removeCartItemEvent", "Missing param event for removeCartItemEvent");
+            Log.d(TAG, "removeCartItemEvent: Missing param event");
             return;
         }
         this.appMetricaECommerce.removeCartItemEvent(event);
@@ -114,7 +117,7 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void purchaseEvent(ReadableMap event) {
         if (event == null) {
-            Log.d("purchaseEvent", "Missing param event for purchaseEvent");
+            Log.d(TAG, "purchaseEvent: Missing param event");
             return;
         }
         this.appMetricaECommerce.purchaseEvent(event);

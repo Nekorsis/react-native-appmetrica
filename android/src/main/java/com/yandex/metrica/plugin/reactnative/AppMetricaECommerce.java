@@ -8,148 +8,51 @@
 
 package com.yandex.metrica.plugin.reactnative;
 
-import android.app.Activity;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.yandex.metrica.YandexMetrica;
 import com.yandex.metrica.ecommerce.ECommerceEvent;
-import com.yandex.metrica.ecommerce.ECommercePrice;
-import com.yandex.metrica.ecommerce.ECommerceAmount;
 import com.yandex.metrica.ecommerce.ECommerceCartItem;
-import com.yandex.metrica.ecommerce.ECommerceProduct;
 import com.yandex.metrica.ecommerce.ECommerceOrder;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
 
 public class AppMetricaECommerce {
-    public AppMetricaECommerce() {
+    
+//    private static final String TAG = "AppMetricaModule:ECommerce";
 
+    public AppMetricaECommerce() {
     }
 
-   public void addCartItemEvent(ReadableMap cartItem) {
-       HashMap data = cartItem.toHashMap();
+   public void addCartItemEvent(ReadableMap data) {
+    ECommerceCartItem cartItem = ECommerceMapper.cartItem(data);
 
-       HashMap productData = (HashMap)data.get("product");
-       Double quantity = (Double)data.get("quantity");
-
-       String id = (String)productData.get("id");
-       HashMap price = (HashMap)productData.get("actualPrice");
-       String name = (String)productData.get("name");
-
-       Double amount = (Double)price.get("value");
-       String currency = (String)price.get("currency");
-
-
-
-       Log.d("AM:AMOUNT", amount.toString());
-       Log.d("AM:ID", id);
-       Log.d("AM:QUANTITY", quantity.toString());
-       Log.d("AM:CURRENCY: ", currency.toString());
-
-       ECommercePrice actualPrice = new ECommercePrice(new ECommerceAmount(amount, currency));
-//               .setInternalComponents(Arrays.asList( // Optional.
-//                       new ECommerceAmount(30_590_000, "wood"),
-//                       new ECommerceAmount(26.92, "iron"),
-//                       new ECommerceAmount(new BigDecimal(5.5), "gold")
-//               ));
-
-    ECommerceProduct product = new ECommerceProduct(id)
-      .setActualPrice(actualPrice) // Optional.
-//      .setPayload(payload) // Optional.
-//      .setOriginalPrice(originalPrice) // Optional.
-      .setName(name); // Optional.
-
-    ECommerceCartItem addedItem = new ECommerceCartItem(product, actualPrice, quantity);
-
-    ECommerceEvent addCartItemEvent = ECommerceEvent.addCartItemEvent(addedItem);
+    ECommerceEvent addCartItemEvent = ECommerceEvent.addCartItemEvent(cartItem);
 
     YandexMetrica.reportECommerce(addCartItemEvent);
    }
 
-   public void removeCartItemEvent(ReadableMap cartItem) {
-        HashMap data = cartItem.toHashMap();
+   public void removeCartItemEvent(ReadableMap cartItemData) {
+        ECommerceCartItem cartItem = ECommerceMapper.cartItem(cartItemData);
 
-        HashMap productData = (HashMap)data.get("product");
-        Double quantity = (Double)data.get("quantity");
-
-        String id = (String)productData.get("id");
-        HashMap price = (HashMap)productData.get("actualPrice");
-        String name = (String)productData.get("name");
-
-        Double amount = (Double)price.get("value");
-        String currency = (String)price.get("currency");
-
-
-
-        Log.d("AM:AMOUNT", amount.toString());
-        Log.d("AM:ID", id);
-        Log.d("AM:QUANTITY", quantity.toString());
-        Log.d("AM:CURRENCY: ", currency.toString());
-
-        ECommercePrice actualPrice = new ECommercePrice(new ECommerceAmount(amount, currency));
-//               .setInternalComponents(Arrays.asList( // Optional.
-//                       new ECommerceAmount(30_590_000, "wood"),
-//                       new ECommerceAmount(26.92, "iron"),
-//                       new ECommerceAmount(new BigDecimal(5.5), "gold")
-//               ));
-
-        ECommerceProduct product = new ECommerceProduct(id)
-                .setActualPrice(actualPrice) // Optional.
-//      .setPayload(payload) // Optional.
-//      .setOriginalPrice(originalPrice) // Optional.
-                .setName(name); // Optional.
-
-        ECommerceCartItem removeItem = new ECommerceCartItem(product, actualPrice, quantity);
-
-        ECommerceEvent removeCartItemEvent = ECommerceEvent.removeCartItemEvent(removeItem);
+        ECommerceEvent removeCartItemEvent = ECommerceEvent.removeCartItemEvent(cartItem);
 
         YandexMetrica.reportECommerce(removeCartItemEvent);
     }
 
     public void purchaseEvent(ReadableMap order) {
-        HashMap orderData = order.toHashMap();
 
-        ArrayList<HashMap> cartItemsData = (ArrayList<HashMap>)orderData.get("cartItems");
+        ReadableArray cartItemsData = order.getArray("cartItems");
         List<ECommerceCartItem> cartItems = new ArrayList<ECommerceCartItem>();
-
-        for (HashMap data : cartItemsData) {
-            Double quantity = (Double)data.get("quantity");
-            HashMap productData = (HashMap)data.get("product");
-
-            String id = (String)productData.get("id");
-            HashMap price = (HashMap)productData.get("actualPrice");
-            String name = (String)productData.get("name");
-
-            Double amount = (Double)price.get("value");
-            String currency = (String)price.get("currency");
-
-            Log.d("AM:AMOUNT", amount.toString());
-            Log.d("AM:ID", id);
-            Log.d("AM:QUANTITY", quantity.toString());
-            Log.d("AM:CURRENCY: ", currency.toString());
-
-
-            ECommercePrice actualPrice = new ECommercePrice(new ECommerceAmount(amount, currency));
-            ECommerceProduct product = new ECommerceProduct(id)
-                    .setActualPrice(actualPrice)
-                    .setName(name);
-            ECommerceCartItem cartItem = new ECommerceCartItem(product, actualPrice, quantity);
-
-            cartItems.add(cartItem);
+        int size = cartItemsData.size();
+        for(int i  = 0; i < size; i ++) {
+            ReadableMap data = cartItemsData.getMap(i);
+            cartItems.add(ECommerceMapper.cartItem(data));
         }
 
-
-        String id = (String)orderData.get("id");
-        Log.d("AM:cartItems", cartItems.toString());
+        String id = order.getString("id");
 
         ECommerceOrder purchaseOrder = new ECommerceOrder(id, cartItems);
 

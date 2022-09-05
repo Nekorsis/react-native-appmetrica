@@ -78,20 +78,12 @@ export default {
     AppMetrica.reportEvent(eventName, attributes);
   },
 
-  removeCartItemEvent: (data: ECommerceCartItem) => {
-    AppMetrica.removeCartItemEvent(data);
-  },
-
-  purchaseEvent: (data: ECommerceOrder) => {
-    AppMetrica.purchaseEvent(data)
+  reportECommerce: () => {
+    AppMetrica.reportECommerce();
   },
 
   reportReferralUrl(referralUrl: string) {
     AppMetrica.reportReferralUrl(referralUrl);
-  },
-
-  addCartItemEvent: (data: any) => {
-    AppMetrica.addCartItemEvent(data);
   },
 
   requestAppMetricaDeviceID(listener: (deviceId?: String, reason?: AppMetricaDeviceIdReason) => void) {

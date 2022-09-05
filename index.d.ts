@@ -35,17 +35,6 @@ type ECommercePrice = {
   currency: string, // RUB || USD
 }
 
-enum ECommerceEventName {
-  addCartItemEvent,
-  beginCheckoutEvent,
-  purchaseEvent,
-  showProductCardEvent,
-  showProductDetailsEvent,
-  showScreenEvent,
-}
-
-
-
 type ECommerceProduct = {
   id: string,
   actualPrice?: ECommercePrice,
@@ -105,18 +94,6 @@ export default {
     AppMetrica.reportAppOpen(deeplink);
   },
 
-  addCartItemEvent: (data: ECommerceCartItem) => {
-    AppMetrica.addCartItemEvent(data);
-  },
-
-  removeCartItemEvent: (data: ECommerceCartItem) => {
-    AppMetrica.removeCartItemEvent(data);
-  },
-
-  purchaseEvent: (data: ECommerceOrder) => {
-    AppMetrica.purchaseEvent(data)
-  },
-
   reportError: (error: string, reason: Object) => {
     AppMetrica.reportError(error);
   },
@@ -155,5 +132,18 @@ export default {
 
   setUserProfileID: (userProfileID?: string) => {
     AppMetrica.setUserProfileID(userProfileID);
+  },
+
+  // ECommerce methods
+  addCartItemEvent: (data: ECommerceCartItem) => {
+    AppMetrica.addCartItemEvent(data);
+  },
+
+  removeCartItemEvent: (data: ECommerceCartItem) => {
+    AppMetrica.removeCartItemEvent(data);
+  },
+
+  purchaseEvent: (data: ECommerceOrder) => {
+    AppMetrica.purchaseEvent(data)
   },
 };
