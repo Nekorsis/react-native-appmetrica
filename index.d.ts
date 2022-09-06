@@ -143,6 +143,9 @@ export default {
     AppMetrica.removeCartItemEvent(data);
   },
 
+  beginCheckoutEvent: (data: ECommerceOrder) => {
+    AppMetrica.beginCheckoutEvent(data)
+  },
   purchaseEvent: (data: ECommerceOrder) => {
     AppMetrica.purchaseEvent(data)
   },

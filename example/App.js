@@ -7,12 +7,12 @@
  */
 
 import React, {Component, useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
+import {Button, StyleSheet, Text, View, ScrollView, SafeAreaView, TouchableOpacity} from 'react-native';
 
 import AppMetrica from 'react-native-appmetrica';
 
 function getRactNativeVersion() {
-  const reactNativePackage = require('./node_modules/react-native/package.json');
+  const reactNativePackage = require('react-native/package.json');
   return reactNativePackage.version;
 }
 
@@ -28,9 +28,7 @@ function isReactNativeVersion(major, minor = 0, path = 0) {
   }
   return curMajor > major;
 }
-
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
   constructor() {
     super();
     if (isReactNativeVersion(0, 60)) {
@@ -51,6 +49,29 @@ export default class App extends Component<Props> {
         this.setState({appMetricaDeviceId: reason != null ? reason : deviceId});
       });
     }
+  }
+
+  hndlePress = () => {
+    AppMetrica.purchaseEvent({
+      id: "123",
+      cartItems: [
+        {
+          "product": {
+            "id": "111",
+            "name": "Test product 1",
+            "actualPrice": {
+              value: 50,
+              currency: 'RUB'
+            }
+          },
+          quantity: 1,
+          revenue: {
+            value: 50,
+            currency: 'RUB'
+          }
+        }
+      ],
+    })
   }
 
   render() {
@@ -79,6 +100,11 @@ export default class App extends Component<Props> {
                   ? this.appMetricaDeviceId
                   : this.state['appMetricaDeviceId']}
               </Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>ECommerce events</Text>
+                <Button onPress={this.hndlePress} title="Send: purchaseEvent">
+                </Button>
             </View>
           </View>
         </ScrollView>

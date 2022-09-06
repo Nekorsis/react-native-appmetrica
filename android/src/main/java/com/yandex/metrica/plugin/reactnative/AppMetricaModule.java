@@ -113,6 +113,14 @@ public class AppMetricaModule extends ReactContextBaseJavaModule {
         }
         this.appMetricaECommerce.removeCartItemEvent(event);
     }
+    @ReactMethod
+    public void beginCheckoutEvent(ReadableMap event) {
+        if (event == null) {
+            Log.d(TAG, "beginCheckoutEvent: Missing param event");
+            return;
+        }
+        this.appMetricaECommerce.beginCheckoutEvent(event);
+    }
 
     @ReactMethod
     public void purchaseEvent(ReadableMap event) {

@@ -1,12 +1,30 @@
 package com.yandex.metrica.plugin.reactnative;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.yandex.metrica.ecommerce.ECommerceAmount;
 import com.yandex.metrica.ecommerce.ECommerceCartItem;
+import com.yandex.metrica.ecommerce.ECommerceOrder;
 import com.yandex.metrica.ecommerce.ECommercePrice;
 import com.yandex.metrica.ecommerce.ECommerceProduct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 abstract class ECommerceMapper {
+    static ECommerceOrder order(ReadableMap order) {
+        ReadableArray cartItemsData = order.getArray("cartItems");
+        List<ECommerceCartItem> cartItems = new ArrayList<>();
+        int size = cartItemsData.size();
+        for(int i  = 0; i < size; i ++) {
+            ReadableMap data = cartItemsData.getMap(i);
+            cartItems.add(ECommerceMapper.cartItem(data));
+        }
+
+        String id = order.getString("id");
+
+        return new ECommerceOrder(id, cartItems);
+    }
     static ECommerceCartItem cartItem(ReadableMap cartItemData) {
         Double quantity = cartItemData.getDouble("quantity");
 

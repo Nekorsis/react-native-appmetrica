@@ -42,19 +42,17 @@ public class AppMetricaECommerce {
         YandexMetrica.reportECommerce(removeCartItemEvent);
     }
 
+    public void beginCheckoutEvent(ReadableMap order) {
+        ECommerceOrder purchaseOrder = ECommerceMapper.order(order);
+
+        ECommerceEvent purchaseEvent = ECommerceEvent.beginCheckoutEvent(purchaseOrder);
+
+        YandexMetrica.reportECommerce(purchaseEvent);
+    }
+
+
     public void purchaseEvent(ReadableMap order) {
-
-        ReadableArray cartItemsData = order.getArray("cartItems");
-        List<ECommerceCartItem> cartItems = new ArrayList<ECommerceCartItem>();
-        int size = cartItemsData.size();
-        for(int i  = 0; i < size; i ++) {
-            ReadableMap data = cartItemsData.getMap(i);
-            cartItems.add(ECommerceMapper.cartItem(data));
-        }
-
-        String id = order.getString("id");
-
-        ECommerceOrder purchaseOrder = new ECommerceOrder(id, cartItems);
+        ECommerceOrder purchaseOrder = ECommerceMapper.order(order);
 
         ECommerceEvent purchaseEvent = ECommerceEvent.purchaseEvent(purchaseOrder);
 
